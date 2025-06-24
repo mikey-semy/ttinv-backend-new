@@ -5,6 +5,16 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
+    "aio-pika>=9.5.5",
+    "aioboto3==13.1",
+    "aiohttp>=3.12.13",
+    "dishka>=1.6.0",
     "fastapi>=0.115.13",
+    "faststream>=0.5.43",
+    "pydantic-settings>=2.10.1",
+    "pytz>=2025.2",
+    "redis>=6.2.0",
+    "sqlalchemy>=2.0.41",
     "starlette-admin>=0.15.1",
+    "uvicorn>=0.34.3",
 ]

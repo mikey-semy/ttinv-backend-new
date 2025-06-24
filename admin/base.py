@@ -1,20 +1,15 @@
-from starlette_admin.contrib.sqla import Admin, ModelView
-from app.models.v1.header import Logo, MenuItem, ContactInfo
-from app.models.v1.base import Base
-from app.core.connections.database import database_client
-from app.core.settings import settings
-from .auth import CustomAuthProvider
+"""
+Модуль инициализации Starlette Admin
 
-engine = database_client.get_engine()
-session_factory = database_client.get_session_factory()
+"""
+
+from starlette_admin.contrib.sqla import Admin
+from app.core.settings import settings
+from admin.auth import CustomAuthProvider
+from app.core.connections.database import database_client
 
 admin = Admin(
-    engine=engine,
-    session_maker=session_factory,
-    base_model=Base,
+    engine=database_client.get_engine(),
     auth_provider=CustomAuthProvider(),
     **settings.admin_params,
-)
-admin.add_view(ModelView(Logo))
-admin.add_view(ModelView(MenuItem))
-admin.add_view(ModelView(ContactInfo)) 
+) 
