@@ -2,7 +2,6 @@
 Модуль инициализации Starlette Admin
 
 """
-from fastapi import FastAPI
 from starlette_admin.contrib.sqla import Admin
 from app.core.settings import settings
 from admin.auth import CustomAuthProvider
