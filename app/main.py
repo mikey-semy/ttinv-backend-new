@@ -10,10 +10,12 @@
 """
 
 import uvicorn
+
 from dishka.integrations.fastapi import setup_dishka
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-
+from starlette.middleware.sessions import SessionMiddleware
+from admin import admin
 from app.core.dependencies.container import container
 from app.core.exceptions.handlers import register_exception_handlers
 
@@ -26,7 +28,6 @@ from app.core.settings import settings
 from app.routes.main import MainRouter
 from app.routes.v1 import APIv1
 
-
 def create_application() -> FastAPI:
     """
     Создает и настраивает экземпляр приложения FastAPI.
@@ -36,7 +37,7 @@ def create_application() -> FastAPI:
     setup_dishka(container=container, app=app)
 
     register_exception_handlers(app=app)
-
+    app.add_middleware(SessionMiddleware, secret_key=settings.TOKEN_SECRET_KEY)
     app.add_middleware(LoggingMiddleware)
     app.add_middleware(DocsAuthMiddleware)
     app.add_middleware(CORSMiddleware, **settings.cors_params)
@@ -46,6 +47,8 @@ def create_application() -> FastAPI:
     v1_router = APIv1()
     v1_router.configure_routes()
     app.include_router(v1_router.get_router(), prefix="/api/v1")
+
+    admin.mount_to(app)
 
     return app
 

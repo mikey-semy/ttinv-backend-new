@@ -16,6 +16,7 @@ dependencies = [
     "fastapi>=0.115.13",
     "faststream>=0.5.43",
     "greenlet>=3.2.3",
+    "itsdangerous>=2.2.0",
     "passlib>=1.7.4",
     "pre-commit>=4.2.0",
     "pydantic>=2.11.7",
@@ -53,7 +54,7 @@ start = "scripts.commands:start_all"
 test = "scripts.commands:test"
 
 [tool.setuptools]
-packages = ["app", "scripts"]
+packages = ["app", "admin", "scripts"]
 
 [tool.pytest.ini_options]
 asyncio_default_fixture_loop_scope = "function"

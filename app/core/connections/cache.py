@@ -114,3 +114,22 @@ class RedisContextManager(BaseContextManager):
         Делегирует закрытие подключения экземпляру RedisClient.
         """
         await self.redis_client.close()
+
+async def get_redis_client() -> Redis:
+    """
+    Утилитарная функция для получения глобального клиента Redis.
+
+    Returns:
+        Redis: Экземпляр подключенного Redis клиента
+
+    Usage:
+        ```python
+        redis_client = await get_redis_client()
+
+        # Использование в коде
+        async with redis_client.pipeline() as pipe:
+            await pipe.set('key', 'value')
+            await pipe.execute()
+        ```
+    """
+    return await RedisContextManager().connect()

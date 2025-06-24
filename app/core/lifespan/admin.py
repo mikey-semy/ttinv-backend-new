@@ -44,4 +44,5 @@ async def initialize_admin(app: FastAPI) -> None:
         await admin_service.initialize_admin(
             admin_email=admin_email,
             password=settings.ADMIN_PASSWORD.get_secret_value()
-        ) 
+        )
+

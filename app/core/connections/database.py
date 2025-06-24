@@ -12,7 +12,7 @@
 
 from sqlalchemy.ext.asyncio import (AsyncEngine, AsyncSession,
                                     async_sessionmaker, create_async_engine)
-from typing import cast, Optional
+from typing import cast, Optional, AsyncGenerator
 import asyncio
 
 from app.core.settings import Config, settings
@@ -108,6 +108,10 @@ class DatabaseClient(BaseClient):
         Raises:
             RuntimeError: если движок еще не инициализирован (connect не вызывался)
         """
+        self._engine = create_async_engine(
+            url=self._settings.database_url, **self._settings.engine_params
+        )
+        
         if self._engine is None:
             raise RuntimeError(
                 "База данных не инициализирована. "
@@ -211,3 +215,57 @@ class DatabaseContextManager(BaseContextManager):
         """
         if self.session:
             await self.session.commit()
+
+# Глобальный экземпляр клиента базы данных
+db_client = DatabaseClient()
+
+
+async def get_session_factory() -> async_sessionmaker:
+    """
+    Утилитарная функция для получения глобальной фабрики сессий.
+
+    Returns:
+        async_sessionmaker: Глобальная фабрика сессий
+
+    Usage:
+        ```python
+        session_factory = await get_session_factory()
+        async with session_factory() as session:
+            # Работа с сессией
+            pass
+        ```
+    """
+    return await db_client.connect()
+
+
+async def close_database_connection() -> None:
+    """
+    Утилитарная функция для закрытия глобального подключения к базе данных.
+
+    Используется при завершении работы приложения.
+
+    Usage:
+        ```python
+        # При завершении работы приложения
+        await close_database_connection()
+        ```
+    """
+    await db_client.close()
+
+async def get_db_session() -> AsyncGenerator[AsyncSession, None]:
+    """
+    Утилитарная функция для получения асинхронной сессии базы данных.
+
+    Returns:
+        AsyncGenerator[AsyncSession, None]: Асинхронный генератор сессий
+
+    Usage:
+        ```python
+        async for session in get_db_session():
+            # Работа с сессией
+            pass
+        ```
+    """
+    session_factory = await get_session_factory()
+    async with session_factory() as session:
+        yield session
