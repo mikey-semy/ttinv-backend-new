@@ -1,5 +1,4 @@
-from datetime import datetime
-from sqlalchemy import String, Integer, Boolean, DateTime, Enum
+from sqlalchemy import String, Boolean, Enum
 from sqlalchemy.orm import Mapped, mapped_column
 from app.models.v1.base import BaseModel
 import enum

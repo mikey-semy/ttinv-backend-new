@@ -8,13 +8,76 @@ dependencies = [
     "aio-pika>=9.5.5",
     "aioboto3==13.1",
     "aiohttp>=3.12.13",
+    "alembic>=1.16.2",
+    "argon2-cffi>=25.1.0",
+    "asyncpg>=0.30.0",
+    "bcrypt>=4.3.0",
     "dishka>=1.6.0",
     "fastapi>=0.115.13",
     "faststream>=0.5.43",
+    "greenlet>=3.2.3",
+    "passlib>=1.7.4",
+    "pre-commit>=4.2.0",
+    "pydantic>=2.11.7",
     "pydantic-settings>=2.10.1",
+    "pytest-asyncio>=1.0.0",
+    "python-jose>=3.5.0",
     "pytz>=2025.2",
     "redis>=6.2.0",
     "sqlalchemy>=2.0.41",
     "starlette-admin>=0.15.1",
+    "types-pytz>=2025.2.0.20250516",
     "uvicorn>=0.34.3",
+]
+[project.optional-dependencies]
+dev = [
+  "black",
+  "flake8",
+  "isort",
+  "mypy",
+  "pytest",
+  "pytest-asyncio",
+]
+
+[project.scripts]
+bootstrap = "scripts.commands:activate"
+check = "scripts.commands:check"
+dev = "scripts.commands:dev"
+format = "scripts.commands:format"
+lint = "scripts.commands:lint"
+migrate = "scripts.commands:migrate"
+prod = "scripts.commands:prod"
+serve = "scripts.commands:serve"
+setup = "scripts.commands:setup"
+start = "scripts.commands:start_all"
+test = "scripts.commands:test"
+
+[tool.setuptools]
+packages = ["app", "scripts"]
+
+[tool.pytest.ini_options]
+asyncio_default_fixture_loop_scope = "function"
+asyncio_mode = "strict"
+filterwarnings = [
+  "ignore::pydantic.PydanticDeprecatedSince20",
+]
+markers = [
+  "integration: marks tests as integration tests",
+]
+
+[tool.mypy]
+plugins = ["sqlalchemy.ext.mypy.plugin"]
+
+[[tool.mypy.overrides]]
+ignore_errors = true
+module = "app.core.migrations.*"
+
+[build-system]
+build-backend = "setuptools.build_meta"
+requires = ["setuptools>=61.0"]
+
+[tool.pylint.messages_control]
+disable = [
+  "unsubscriptable-object",
+  "not-callable",
 ]

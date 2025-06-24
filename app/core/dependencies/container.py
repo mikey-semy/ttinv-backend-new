@@ -6,7 +6,6 @@ from dishka import make_async_container
 from dishka.integrations.fastapi import FastapiProvider
 
 from .providers.admin import AdminProvider
-from .providers.auth import AuthProvider
 from .providers.cache import RedisMiddlewareProvider, RedisProvider
 from .providers.database import DatabaseProvider
 from .providers.messaging import RabbitMQProvider
@@ -22,5 +21,4 @@ container = make_async_container(
     RedisProvider(),
     RedisMiddlewareProvider(),
     S3Provider(),
-    AuthProvider(),
 )
