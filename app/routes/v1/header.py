@@ -1,7 +1,6 @@
 from app.routes.base import BaseRouter
-from fastapi import Depends, status
+from dishka.integrations.fastapi import FromDishka, inject
 from app.services.v1.header.service import LogoService, MenuItemService, ContactInfoService
-from app.services.v1.header.data_manager import LogoDataManager, MenuItemDataManager, ContactInfoDataManager
 from app.schemas.v1.header.requests import (
     LogoCreateSchema, LogoUpdateSchema,
     MenuItemCreateSchema, MenuItemUpdateSchema,
@@ -12,8 +11,7 @@ from app.schemas.v1.header.responses import (
     MenuItemResponseSchema, MenuItemListResponseSchema,
     ContactInfoResponseSchema, ContactInfoListResponseSchema
 )
-from sqlalchemy.ext.asyncio import AsyncSession
-from fastapi import APIRouter
+
 
 class HeaderRouter(BaseRouter):
     """
